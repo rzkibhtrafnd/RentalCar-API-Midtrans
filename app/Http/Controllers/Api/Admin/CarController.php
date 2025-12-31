@@ -21,7 +21,7 @@ class CarController extends Controller
 
     public function index()
     {
-        $filters = request()->only(['transmission', 'available_status']);
+        $filters = request()->only('transmission');
 
         $cars = $this->service->list($filters);
 

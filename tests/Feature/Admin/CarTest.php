@@ -16,6 +16,7 @@ class CarTest extends TestCase
         return $admin;
     }
 
+    /** @test */
     public function test_admin_can_list_cars()
     {
         $this->actingAsAdmin();
@@ -30,6 +31,7 @@ class CarTest extends TestCase
                  ]);
     }
 
+    /** @test */
     public function test_admin_can_store_car()
     {
         $this->actingAsAdmin();
@@ -54,6 +56,7 @@ class CarTest extends TestCase
         $this->assertDatabaseHas('cars', ['name' => 'Toyota Avanza']);
     }
 
+    /** @test */
     public function test_admin_can_show_car_detail()
     {
         $this->actingAsAdmin();
@@ -68,6 +71,7 @@ class CarTest extends TestCase
                  ]);
     }
 
+    /** @test */
     public function test_admin_can_update_car()
     {
         $this->actingAsAdmin();
@@ -86,6 +90,7 @@ class CarTest extends TestCase
         $this->assertDatabaseHas('cars', ['name' => 'Updated Name']);
     }
 
+    /** @test */
     public function test_admin_can_delete_car()
     {
         $this->actingAsAdmin();

@@ -12,7 +12,7 @@ class AuthTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function register_user_baru()
+    public function register_new_user()
     {
         $payload = [
             'name'                  => 'Test User',
@@ -35,7 +35,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function login_gagal_jika_email_salah()
+    public function login_failed_if_email_incorrect()
     {
         $payload = [
             'email'    => 'wrong@example.com',
@@ -52,7 +52,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function dapat_login_user_exist_dan_mendapatkan_token()
+    public function login_user_exist_and_get_token()
     {
         $user = User::factory()->create([
             'email' => 'login@example.com',
@@ -82,7 +82,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function logout_dan_token_dihapus()
+    public function logout_and_token_deleted()
     {
         $user = User::factory()->create();
         $token = $user->createToken('api')->plainTextToken;

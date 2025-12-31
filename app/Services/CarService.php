@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\Storage;
 
 class CarService
 {
-    public function list()
+    public function list(array $filters = [])
     {
         return Car::query()
-            ->transmission($filter['transmission'] ?? null)
-            ->availableStatus($filters['available_status'] ?? null)
+            ->transmission($filters['transmission'] ?? null)
             ->latest()
             ->paginate(6);
     }

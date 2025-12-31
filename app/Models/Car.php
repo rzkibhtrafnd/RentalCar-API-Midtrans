@@ -32,16 +32,7 @@ class Car extends Model
         }
         return $query;
     }
-
-    // Filter Status Ketersediaan
-    public function scopeAvailableStatus($query, $status)
-    {
-        if ($status) {
-            return $query->where('available_status', $status);
-        }
-        return $query;
-    }
-
+    
     public function booking()
     {
         return $this->belongsTo(Booking::class);

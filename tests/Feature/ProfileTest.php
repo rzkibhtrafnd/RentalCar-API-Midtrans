@@ -13,7 +13,7 @@ class ProfileTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function user_dapat_mengambil_data_profile()
+    public function user_can_retrieve_profile_data()
     {
         $user = User::factory()->create();
         Profile::factory()->create(['user_id' => $user->id]);
@@ -37,7 +37,7 @@ class ProfileTest extends TestCase
     }
 
     /** @test */
-    public function user_dapat_update_profile()
+    public function user_can_update_profile()
     {
         $user = User::factory()->create();
         Profile::factory()->create(['user_id' => $user->id]);
@@ -70,7 +70,7 @@ class ProfileTest extends TestCase
     }
 
     /** @test */
-    public function update_password_gagal_jika_password_lama_salah()
+    public function update_password_failed_if_old_password_is_incorrect()
     {
         $user = User::factory()->create([
             'password' => Hash::make('password123')

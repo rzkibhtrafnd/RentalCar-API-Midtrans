@@ -29,7 +29,7 @@ class PaymentController extends Controller
         }
 
         if ($booking->payment_status === 'paid') {
-            return ApiResponse::error('Pemesanan ini sudah dibayar.');
+            return ApiResponse::error('Pemesanan ini sudah dibayar.', 422);
         }
 
         $token = $this->service->createMidtransPayment($booking);
