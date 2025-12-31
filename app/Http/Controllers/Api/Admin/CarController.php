@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCarRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\Car;
 use App\Services\CarService;
+use App\Http\Resources\CarResource;
 
 class CarController extends Controller
 {
@@ -24,24 +25,26 @@ class CarController extends Controller
 
         $cars = $this->service->list($filters);
 
-        return ApiResponse::success('Daftar mobil berhasil diambil', $cars, 200);
+        return ApiResponse::success('Daftar mobil berhasil diambil', 
+            CarResource::collection($cars), 200
+        );
     }
 
     public function store(StoreCarRequest $request)
     {
         $car = $this->service->store($request->validated());
-        return ApiResponse::success('Mobil berhasil ditambahkan', $car);
+        return ApiResponse::success('Mobil berhasil ditambahkan', new CarResource($car), 201);
     }
 
     public function show(Car $car)
     {
-        return ApiResponse::success('Detail mobil berhasil diambil', $car, 200);
+        return ApiResponse::success('Detail mobil berhasil diambil', new CarResource($car), 200);
     }
 
     public function update(UpdateCarRequest $request, Car $car)
     {
         $updated = $this->service->update($car, $request->validated());
-        return ApiResponse::success('Mobil berhasil diperbarui', $updated, 200);
+        return ApiResponse::success('Mobil berhasil diperbarui', new CarResource($updated), 200);
     }
 
     public function destroy(Car $car)

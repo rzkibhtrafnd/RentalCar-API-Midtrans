@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Responses\ApiResponse;
 use App\Services\AuthService;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -20,7 +22,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = $this->auth->register($request->validated());
-        return ApiResponse::success('Register berhasil', $user, 201);
+        return ApiResponse::success('Register berhasil', new UserResource($user), 201);
     }
 
     public function login(LoginRequest $request)
@@ -35,7 +37,7 @@ class AuthController extends Controller
 
         return ApiResponse::success('Login berhasil', [
             'token' => $token,
-            'user'  => $user,
+            'user'  => new UserResource($user),
         ]);
     }
 

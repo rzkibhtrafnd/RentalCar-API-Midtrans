@@ -23,7 +23,6 @@ class WebhookController extends Controller
             return ApiResponse::error('Payment not found', 404);
         }
 
-        // Update semua data payment
         $payment->update([
             'transaction_id'     => $payload['transaction_id'] ?? null,
             'payment_type'       => $payload['payment_type'] ?? null,
@@ -32,7 +31,6 @@ class WebhookController extends Controller
             'payload'            => json_encode($payload),
         ]);
 
-        // Booking status logic
         $transactionStatus = $payload['transaction_status'] ?? null;
 
         match ($transactionStatus) {

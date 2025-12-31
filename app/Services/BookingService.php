@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingService
 {
+    // Function User
+
     public function createBooking(int $carId, array $data): Booking
     {
         $car = Car::findOrFail($carId);
@@ -19,7 +21,7 @@ class BookingService
         $totalPrice = $duration * $car->price_per_day;
 
         $hasBooking = Booking::where('car_id', $car->id)
-            ->whereIn('status', ['pending', 'paid', 'confirmed']) // mobil sedang dipesan
+            ->whereIn('status', ['pending', 'paid']) // mobil sedang dipesan
             ->where(function ($query) use ($start, $end) {
                 $query
                     ->where('start_date', '<=', $end)
@@ -49,5 +51,28 @@ class BookingService
             ->with(['car', 'payment'])
             ->orderByDesc('created_at')
             ->get();
+    }
+
+    // Function Admin
+
+    public function getAllBookings()
+    {
+        return Booking::with(['user', 'car', 'payment'])
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
+    public function updateStatusToFinished(int $bookingId): ?Booking
+    {
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return null;
+        }
+
+        $booking->status = 'finished';
+        $booking->save();
+
+        return $booking;
     }
 }

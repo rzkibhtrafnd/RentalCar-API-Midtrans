@@ -7,7 +7,8 @@ use App\Http\Requests\Profile\UpdateProfileRequest;
 use App\Http\Requests\Profile\UpdatePasswordRequest;
 use App\Http\Responses\ApiResponse;
 use App\Services\ProfileService;
-use GrahamCampbell\ResultType\Success;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\ProfileResource;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -21,14 +22,16 @@ class ProfileController extends Controller
 
     public function show(Request $request)
     {
-        $profile = $this->service->getProfile($request->user());
-        return ApiResponse::success('Data profil berhasil diambil', $profile, 201);
+        $user = $request->user()->load('profile');
+        return ApiResponse::success('Data profil berhasil diambil', new UserResource($user), 200);
     }
 
     public function update(UpdateProfileRequest $request)
     {
         $profile = $this->service->updateProfile($request->user(), $request->validated());
-        return ApiResponse::success('Profile berhasil diperbarui', $profile, 201);
+        $user = $request->user()->load('profile');
+
+        return ApiResponse::success('Profile berhasil diperbarui', new UserResource($user), 200);
     }
 
     public function updatePassword(UpdatePasswordRequest $request)
@@ -43,6 +46,6 @@ class ProfileController extends Controller
             return ApiResponse::error('Kata sandi lama salah', 401);
         }
 
-        return ApiResponse::success('Password berhasil diperbarui', 201);
+        return ApiResponse::success('Password berhasil diperbarui', null, 200);
     }
 }

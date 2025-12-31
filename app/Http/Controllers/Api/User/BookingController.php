@@ -8,6 +8,7 @@ use App\Http\Responses\ApiResponse;
 use App\Services\BookingService;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Booking;
+use App\Http\Resources\BookingResource;
 
 class BookingController extends Controller
 {
@@ -22,19 +23,19 @@ class BookingController extends Controller
     {
         $bookings = $this->service->getAllForUser(Auth::id());
 
-        return ApiResponse::success('Daftar pemesanan diambil', $bookings);
+        return ApiResponse::success('Daftar pemesanan diambil', BookingResource::collection($bookings), 200);
     }
 
     public function store(CreateBookingRequest $request, $carId)
-{
-    try {
-        $booking = $this->service->createBooking($carId, $request->validated());
-        return ApiResponse::success('Booking dibuat', $booking);
+    {
+        try {
+            $booking = $this->service->createBooking($carId, $request->validated());
+            return ApiResponse::success('Booking berhasil dibuat', new BookingResource($booking), 201);
 
-    } catch (\Exception $e) {
-        return ApiResponse::error($e->getMessage(), 422);
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage(), 422);
+        }
     }
-}
 
     public function show($id)
     {
@@ -47,7 +48,7 @@ class BookingController extends Controller
             return ApiResponse::error('Pemesanan tidak ditemukan', 404);
         }
 
-        return ApiResponse::success('Detail pemesanan diambil', $booking);
+        return ApiResponse::success('Detail pemesanan diambil', new BookingResource($booking), 200);
     }
 
     public function cancel($id)
@@ -69,6 +70,6 @@ class BookingController extends Controller
             'payment_status' => 'cancelled',
         ]);
 
-        return ApiResponse::success('Pemesanan dibatalkan');
+        return ApiResponse::success('Pemesanan dibatalkan', 200);
     }
 }

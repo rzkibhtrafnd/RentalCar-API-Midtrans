@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Models\Car;
 use App\Services\CarService;
+use App\Http\Resources\CarResource;
 
 class CarController extends Controller
 {
@@ -22,11 +23,11 @@ class CarController extends Controller
 
         $cars = $this->service->list($filters);
 
-        return ApiResponse::success('Daftar mobil berhasil diambil', $cars, 200);
+        return ApiResponse::success('Daftar mobil berhasil diambil', CarResource::collection($cars), 200);
     }
 
     public function show(Car $car)
     {
-        return ApiResponse::success('Detail mobil berhasil diambil', $car, 200);
+        return ApiResponse::success('Detail mobil berhasil diambil', new CarResource($car), 200);
     }
 }

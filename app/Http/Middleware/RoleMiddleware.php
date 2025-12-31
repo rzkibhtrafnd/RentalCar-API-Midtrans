@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
@@ -13,8 +14,17 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $role): Response
     {
+        $user = Auth::user();
+
+        if (!$user || $user->role !== $role) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Forbidden – Kamu tidak punya akses'
+            ], 403);
+        }
+
         return $next($request);
     }
 }
